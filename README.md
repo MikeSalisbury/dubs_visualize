@@ -40,3 +40,6 @@ In Dubs Visualize, users will be able to:
 - [ ] overlay background image, begin styling
 ### Day 4: Have a functional and styled app
 - [ ] complete styling and workout any bugs
+
+## BONUS
+- [ ] bubble chart based on FG% for the season selected.
