@@ -9,9 +9,9 @@ The shotchart will be overlayed over a basketball court (ideally warriors court)
 In Dubs Visualize, users will be able to:
 
 - [ ] filter shotchart by season: 2014-2015, 2015-2016, 2016-2017. (onChange)
-- [ ] hover over circle to see player's name, season fg%. (mouseOver / mouseOut)
+- [ ] hover over circle to see player's name, defender's name, action_type (dunk, layup, etc), shot_type (2pt, 3pt), season fg%?. (mouseOver / mouseOut)
 - [ ] filter shotchart by player name, can select player to reveal only their shots for the selected season. (onChange)
-- [ ] possible filter by makes/misses. (onChange)
+- [ ] possible filter by makes/misses. (onChange = shot_made_flag => 1 if made, 0 if missed)
 
 ## Wireframes
 ![shotchart](https://raw.githubusercontent.com/MikeSalisbury/dubs_visualize/master/warriors_shotchart_wireframe.png)
