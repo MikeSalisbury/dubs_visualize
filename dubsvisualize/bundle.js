@@ -9435,87 +9435,91 @@ function transform(node) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3__ = __webpack_require__(172);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3_scale__ = __webpack_require__(395);
+  
+  
 
+  __WEBPACK_IMPORTED_MODULE_0_d3__["a" /* csv */]('./data/warriors_2016_2017.csv', function(data) {
 
+    var xScale = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* scaleLinear */]()
+      .domain([-248, 246])
+      .range([85, 760]);
 
-__WEBPACK_IMPORTED_MODULE_0_d3__["a" /* csv */]('./data/warriors_2016_2017.csv', function(data) {
+    var yScale = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* scaleLinear */]()
+      .domain([-40, 743])
+      .range([80, 1150]);
 
-  var xScale = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* scaleLinear */]()
-    .domain([-248, 246])
-    .range([85, 760]);
-
-  var yScale = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* scaleLinear */]()
-    .domain([-40, 743])
-    .range([80, 1150]);
-
-  var shots = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */]('svg')
-    .selectAll('g')
-    .data(data)
-    .enter()
-    .append('g')
-      .attr('class', 'shot')
-      .attr('transform', function(d) {
-        return "translate(" + xScale(d.x) * 1 + "," + yScale(d.y) * 1 + ")";
+    var shots = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */]('#shotchart-canvas')
+      .selectAll('g')
+      .data(data)
+      .enter()
+      .append('g')
+        .attr('class', 'shot')
+        .attr('transform', function(d) {
+          return "translate(" + xScale(d.x) * 1 + "," + yScale(d.y) * 1 + ")";
+        })
+      .on('mouseover', function(d) {
+          __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */](this).raise()
+            .append('text')
+            .attr('class', 'playerName')
+            .text(d.name);
+          // d3.select(this).raise()
+          //   .append('text')
+          //   .attr('class', 'shotType')
+          //   .text(d.action_type);
       })
-    .on('mouseover', function(d) {
-        __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */](this).raise()
-          .append('text')
-          .attr('class', 'playerName')
-          .text(d.name);
-        // d3.select(this).raise()
-        //   .append('text')
-        //   .attr('class', 'shotType')
-        //   .text(d.action_type);
-    })
-    .on('mouseout', function(d) {
-        __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* selectAll */]('text.playerName').remove();
-        // d3.selectAll('text.shotType').remove();
+      .on('mouseout', function(d) {
+          __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* selectAll */]('text.playerName').remove();
+          // d3.selectAll('text.shotType').remove();
+      });
+
+    shots.append("circle")
+      .attr('r', 5)
+      .attr('fill', function(d) {
+        if (d.shot_made_flag == 1) {
+          return 'green';
+        } else {
+          return 'red';
+        }})
+      .attr('stroke', 'black');
+
+    var players = __WEBPACK_IMPORTED_MODULE_0_d3__["b" /* nest */]()
+      .key(function(d) { return d.name; })
+      .rollup(function(arr) { return arr.length; })
+      .entries(data);
+
+    players.unshift({'key': 'ALL',
+      'value': __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* sum */](players, function(d) { return d.value; })
     });
 
-  shots.append("circle")
-    .attr('r', 5)
-    .attr('fill', function(d) {
-      if (d.shot_made_flag == 1) {
-        return 'green';
-      } else {
-        return 'red';
-      }})
-    .attr('stroke', 'black');
+    var selectedPlayer = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */]('#selected-player');
 
-  var players = __WEBPACK_IMPORTED_MODULE_0_d3__["b" /* nest */]()
-    .key(function(d) { return d.name; })
-    .rollup(function(arr) { return arr.length; })
-    .entries(data);
+    selectedPlayer
+      .selectAll('option')
+      .data(players)
+      .enter()
+      .append('option')
+        .text(function(d) { return d.key + " : " + d.value + ' shots'; })
+        .attr('value', function(d) { return d.key; });
 
-  players.unshift({'key': 'ALL',
-    'value': __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* sum */](players, function(d) { return d.value; })
+    selectedPlayer
+      .on('change', function() {
+        __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* selectAll */](".shot")
+          .attr('opacity', 1.0);
+        var value = selectedPlayer.property('value');
+          if (value != 'ALL') {
+            __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* selectAll */]('.shot')
+              .filter(function(d) { return d.name != value; })
+              .attr('opacity', 0.0);
+          }
+      });
+
+      var bubbleChart = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */]('#bubble-chart-canvas')
+        .selectAll
+
+
+
+
   });
-
-  var selectedPlayer = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* select */]('#selected-player');
-
-  selectedPlayer
-    .selectAll('option')
-    .data(players)
-    .enter()
-    .append('option')
-      .text(function(d) { return d.key + " : " + d.value + ' shots'; })
-      .attr('value', function(d) { return d.key; });
-
-  selectedPlayer
-    .on('change', function() {
-      __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* selectAll */](".shot")
-        .attr('opacity', 1.0);
-      var value = selectedPlayer.property('value');
-        if (value != 'ALL') {
-          __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* selectAll */]('.shot')
-            .filter(function(d) { return d.name != value; })
-            .attr('opacity', 0.0);
-        }
-    });
-
-
-
-});
 
 
 /***/ }),

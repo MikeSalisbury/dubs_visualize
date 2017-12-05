@@ -6,15 +6,26 @@
     <link rel="stylesheet" href="shotchart.css" type="text/css">
   </head>
   <body>
-    <h1>Dubs Visualize</h1>
 
     <div id='shotchart'>
-      <div id='select-filters'>
-        <select id='selected-season'></select>
-        <select id='selected-player'></select>
+      <div id='header'>
+        <h1>Dubs Visualize</h1>
+        <div id='select-filters'>
+          <div id='season-slider-container'>
+            <h3>Select a season:</h3>
+            <input name="season" type="range" min="2014" max="2016" id="season-slider" value="2016">
+            <h3 id="selected-season">2016-2017 season</h3>
+          </div>
+          <div id='player-selector-container'>
+            <h3>Select a player:</h3>
+            <select id='selected-player'></select>
+          </div>
+        </div>
       </div>
-      <svg id='canvas' height='643px'width='820px'
-      <image href='./141_golden_state-warriors-stadium-2012.png' height="643px" width="820px" /></svg>
+      <div id='svg-canvas'>
+        <svg id='shotchart-canvas' height='643px' width='820px' ></svg>
+        <svg id='bubble-chart-canvas' height='643px' width='820px' ></svg>
+      </div>
       <script src='bundle.js'></script>
     </div>
 
