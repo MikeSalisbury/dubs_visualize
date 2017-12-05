@@ -1,0 +1,18 @@
+svg {
+  border: 1px solid black;
+}
+
+#canvas {
+  background: url(141_golden_state-warriors-stadium-2012.png);
+  z-index: 3;
+}
+
+.shot {
+  z-index: 1;
+}
+
+
+.playerName {
+  color: yellow;
+  font-size: 20px;
+}
