@@ -9,7 +9,7 @@
 
     var yScale = d3.scaleLinear()
       .domain([-40, 743])
-      .range([80, 1150]);
+      .range([95, 1150]);
 
     var shots = d3.select('#shotchart-canvas')
       .selectAll('g')
@@ -76,8 +76,41 @@
           }
       });
 
-      var bubbleChart = d3.select('#bubble-chart-canvas')
-        .selectAll
+      var onlyPlayers = players.slice(1);
+console.log(onlyPlayers);
+      var bubbles = d3.select('#bubble-chart-canvas')
+
+        .selectAll('g')
+        .data(onlyPlayers)
+        .enter()
+        .append('g')
+          .attr('class', 'bubble');
+
+      var simulation = d3.forceSimulation(data)
+      .force("charge", d3.forceManyBody().strength([50]))
+      .force("x", d3.forceX())
+      .force("y", d3.forceY());
+      // .on("tick", ticked);
+      //
+      // function ticked(e) {
+      //   bubbles.attr("cx", function(d) { return d.x; })
+      //   .attr("cy", function(d) { return d.y; });
+      // }
+
+      var scaleRadius = d3.scaleLinear()
+          .domain([d3.min(onlyPlayers, function(d) { return +d.value; }),
+                  d3.max(onlyPlayers, function(d) { return +d.value; })])
+          .range([10,150]);
+
+      bubbles.append('circle')
+        .attr('r', function(d) {
+          return scaleRadius(d.value);
+        })
+        .attr('fill', 'blue')
+        .attr('stroke', 'black')
+        .attr('transform', 'translate(' + [820/ 2, 643 / 2] + ')');
+
+
 
 
 
