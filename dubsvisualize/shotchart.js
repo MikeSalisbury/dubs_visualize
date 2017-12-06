@@ -1,8 +1,6 @@
   import * as d3 from 'd3';
-  import * as scale from 'd3-scale';
 
   d3.csv('./data/warriors_2016_2017.csv', function(data) {
-
     var xScale = d3.scaleLinear()
       .domain([-248, 246])
       .range([85, 760]);
@@ -18,7 +16,7 @@
       .append('g')
         .attr('class', 'shot')
         .attr('transform', function(d) {
-          return "translate(" + xScale(d.x) * 1 + "," + yScale(d.y) * 1 + ")";
+          return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
         })
       .on('mouseover', function(d) {
           d3.select(this).raise()
@@ -77,38 +75,66 @@
       });
 
       var onlyPlayers = players.slice(1);
-console.log(onlyPlayers);
-      var bubbles = d3.select('#bubble-chart-canvas')
-
-        .selectAll('g')
-        .data(onlyPlayers)
-        .enter()
-        .append('g')
-          .attr('class', 'bubble');
-
-      var simulation = d3.forceSimulation(data)
-      .force("charge", d3.forceManyBody().strength([50]))
-      .force("x", d3.forceX())
-      .force("y", d3.forceY());
-      // .on("tick", ticked);
-      //
-      // function ticked(e) {
-      //   bubbles.attr("cx", function(d) { return d.x; })
-      //   .attr("cy", function(d) { return d.y; });
-      // }
 
       var scaleRadius = d3.scaleLinear()
           .domain([d3.min(onlyPlayers, function(d) { return +d.value; }),
                   d3.max(onlyPlayers, function(d) { return +d.value; })])
-          .range([10,150]);
+          .range([15, 100]);
 
-      bubbles.append('circle')
-        .attr('r', function(d) {
-          return scaleRadius(d.value);
-        })
-        .attr('fill', 'blue')
-        .attr('stroke', 'black')
-        .attr('transform', 'translate(' + [820/ 2, 643 / 2] + ')');
+      var bubbles = d3.select('#bubble-chart-canvas')
+        .selectAll('g')
+        .data(onlyPlayers)
+        .enter()
+        .append('g')
+        .append('circle')
+          .attr('r', function(d) {
+            return scaleRadius(d.value);
+          })
+          .attr('fill', 'blue')
+          .attr('stroke', 'black')
+          .attr('transform', 'translate(' + [0, 0] + ')')
+
+        .on('mouseover', function(d) {
+            d3.select(this).raise()
+              .append('text')
+              .attr('class', 'playerName')
+              .text(d.name);});
+
+      var simulation = d3.forceSimulation()
+      .force("charge", d3.forceManyBody().strength(2))
+      .force('center', d3.forceCenter(820/ 2, 643 / 2))
+      .force('collision', d3.forceCollide(function(d) {
+        return scaleRadius(d.value) + 1;
+      }));
+      // .force("x", d3.forceX(643 / 2).strength(0.05))
+      // .force("y", d3.forceY(820/ 2).strength(0.05))
+      // .force('collide', d3.forceCollide( function(d) {
+      //   return scaleRadius(d.value) + 1;
+      // }));
+      // .on("tick", ticked);
+
+      function ticked(e) {
+        bubbles.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+      }
+
+
+      simulation.nodes(onlyPlayers)
+        .on('tick', ticked);
+
+      // var scaleRadius = d3.scaleLinear()
+      //     .domain([d3.min(onlyPlayers, function(d) { return +d.value; }),
+      //             d3.max(onlyPlayers, function(d) { return +d.value; })])
+      //     .range([10,150]);
+
+      // bubbles.append('circle')
+      //   .attr('r', function(d) {
+      //     return scaleRadius(d.value);
+      //   })
+      //   .attr('fill', 'blue')
+      //   .attr('stroke', 'black')
+        // simulation.nodes(onlyPlayers)
+        //   .on('tick', 'ticked');
 
 
 

@@ -5,6 +5,7 @@
   "main": "shotchart.js",
   "dependencies": {
     "d3": "^4.12.0",
+    "d3-force": "^1.1.0",
     "d3-scale": "^1.0.7",
     "d3-svg-legend": "^2.25.0"
   },
