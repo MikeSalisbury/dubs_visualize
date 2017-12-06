@@ -60,5 +60,14 @@ svg {
 }
 
 #selected-player {
-  width: 60%;
+  width: 65%;
+}
+
+#bubble-chart-canvas {
+  position: relative;
+}
+
+.bubble-chart-node:hover {
+  fill: yellow;
+  stroke: blue;
 }
