@@ -20,17 +20,23 @@
           return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
         })
       .on('mouseover', function(d) {
-          d3.select(this).raise()
-            .append('text')
-            .attr('class', 'playerName')
-            .text(d.name);
-          // d3.select(this).raise()
-          //   .append('text')
-          //   .attr('class', 'shotType')
-          //   .text(d.action_type);
+        console.log(d);
+        tooltip.html(
+           "Player Name: " + d.name + "<br/>" +
+           "Shot Distance: " + d.shot_distance + "ft <br/>" +
+           "Shot Type: " + d.action_type + "<br/>" +
+           "Points: " + d.shot_type.slice(0, 3))
+        .style('opacity', 1.0);
+        })
+
+      .on('mousemove', function() {
+        return tooltip
+          .style('top', (d3.event.pageY - 100) + 'px')
+          .style('left', (d3.event.pageX - 100) + 'px');
       })
+
       .on('mouseout', function(d) {
-          setTimeout(function() {d3.selectAll('text.playerName').remove();}, 100);
+          tooltip.style('opacity', 0);
           // d3.selectAll('text.shotType').remove();
       });
 
@@ -66,12 +72,12 @@
     selectedPlayer
       .on('change', function() {
         d3.selectAll(".shot")
-          .attr('opacity', 1.0);
+          .attr('visibility', 'visible');
         var value = selectedPlayer.property('value');
           if (value != 'ALL') {
             d3.selectAll('.shot')
               .filter(function(d) { return d.name != value; })
-              .attr('opacity', 0.0);
+              .attr('visibility', 'hidden');
           }
       });
 
@@ -98,6 +104,7 @@
           .attr('transform', 'translate(' + [0, 0] + ')')
 
         .on('mouseover', function(d) {
+          console.log(d);
           tooltip.html(
              "Player Name: " + d.key + "<br/>" +
              "Total Shots: " + d.value + "<br/>")

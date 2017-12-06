@@ -9456,17 +9456,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
         })
       .on('mouseover', function(d) {
-          __WEBPACK_IMPORTED_MODULE_0_d3__["l" /* select */](this).raise()
-            .append('text')
-            .attr('class', 'playerName')
-            .text(d.name);
-          // d3.select(this).raise()
-          //   .append('text')
-          //   .attr('class', 'shotType')
-          //   .text(d.action_type);
+        console.log(d);
+        tooltip.html(
+           "Player Name: " + d.name + "<br/>" +
+           "Shot Distance: " + d.shot_distance + "ft <br/>" +
+           "Shot Type: " + d.action_type + "<br/>" +
+           "Points: " + d.shot_type.slice(0, 3))
+        .style('opacity', 1.0);
+        })
+
+      .on('mousemove', function() {
+        return tooltip
+          .style('top', (__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* event */].pageY - 100) + 'px')
+          .style('left', (__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* event */].pageX - 100) + 'px');
       })
+
       .on('mouseout', function(d) {
-          setTimeout(function() {__WEBPACK_IMPORTED_MODULE_0_d3__["m" /* selectAll */]('text.playerName').remove();}, 100);
+          tooltip.style('opacity', 0);
           // d3.selectAll('text.shotType').remove();
       });
 
@@ -9502,12 +9508,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     selectedPlayer
       .on('change', function() {
         __WEBPACK_IMPORTED_MODULE_0_d3__["m" /* selectAll */](".shot")
-          .attr('opacity', 1.0);
+          .attr('visibility', 'visible');
         var value = selectedPlayer.property('value');
           if (value != 'ALL') {
             __WEBPACK_IMPORTED_MODULE_0_d3__["m" /* selectAll */]('.shot')
               .filter(function(d) { return d.name != value; })
-              .attr('opacity', 0.0);
+              .attr('visibility', 'hidden');
           }
       });
 
@@ -9534,6 +9540,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           .attr('transform', 'translate(' + [0, 0] + ')')
 
         .on('mouseover', function(d) {
+          console.log(d);
           tooltip.html(
              "Player Name: " + d.key + "<br/>" +
              "Total Shots: " + d.value + "<br/>")
