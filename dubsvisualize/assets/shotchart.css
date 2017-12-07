@@ -68,8 +68,8 @@ svg {
 }
 
 .bubble-chart-node:hover {
-  fill: yellow;
-  stroke: blue;
+  /*fill: yellow;*/
+  stroke: yellow;
 }
 
 .tooltip {

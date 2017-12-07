@@ -1,6 +1,21 @@
   import * as d3 from 'd3';
 
   d3.csv('./data/warriors_2016_2017.csv', function(data) {
+
+    var defs = d3.select('#bubble-chart-canvas').append('defs');
+
+      defs.append("pattern")
+        .attr("id", "Stephen-Curry")
+        .attr("height", "100%")
+        .attr("width", "100%")
+        .attr("patternContentUnits", "objectBoundingBox")
+        .append("image")
+        .attr("height", 1)
+        .attr("weight", 1)
+        .attr("preserveAspectRadio", "none")
+        .attr("xmlns:xlink", "http://w3.org/1999/xlink")
+        .attr("xlink:href", "./assets/stephen_curry.png");
+
     var xScale = d3.scaleLinear()
       .domain([-248, 246])
       .range([85, 760]);
@@ -108,7 +123,27 @@
       var scaleRadius = d3.scaleLinear()
           .domain([d3.min(onlyPlayers, function(d) { return +d.value; }),
                   d3.max(onlyPlayers, function(d) { return +d.value; })])
-          .range([15, 100]);
+          .range([20, 120]);
+
+          defs.selectAll(".player-pattern")
+             .data(onlyPlayers)
+             .enter().append("pattern")
+             .attr("class", "player-pattern")
+             .attr("id", function(d){
+               return d.key.replace(/ /g,"-");
+             })
+             .attr("height", "100%")
+             .attr("width", "100%")
+             .attr("patternContentUnits", "objectBoundingBox")
+             .append("image")
+             .attr("height", 1)
+             .attr("weight", 1)
+             .attr("preserveAspectRadio", "none")
+             .attr("xmlns:xlink", "http://w3.org/1999/xlink")
+             .attr("xlink:href", function (d) {
+               console.log(d);
+               return `${d.player_img}`;
+             });
 
       var bubbles = d3.select('#bubble-chart-canvas')
         .selectAll('g')
@@ -120,11 +155,11 @@
           .attr('r', function(d) {
             return scaleRadius(d.value);
           })
-        //   .attr('fill', function(d) {
-        //     return `url('${d.player_img}')`;
-        // })
-          .attr('fill', 'blue')
-          .attr('stroke', 'yellow')
+          .attr("fill", function(d) {
+            return "url(#" + d.key.replace(/ /g,"-") + ")";
+          })
+          // .attr('fill', 'blue')
+          .attr('stroke', 'blue')
           .attr('stroke-width', '3px')
           .attr('transform', 'translate(' + [0, 0] + ')')
 
@@ -163,10 +198,10 @@
          .style('opacity', 0);
 
       var simulation = d3.forceSimulation()
-      .force("charge", d3.forceManyBody().strength(2))
+      .force("charge", d3.forceManyBody().strength([50]))
       .force('center', d3.forceCenter(820/ 2, 643 / 2))
       .force('collide', d3.forceCollide(function(d) {
-        return scaleRadius(d.value) + 1;
+        return scaleRadius(d.value) + 2;
       }));
       // .force("x", d3.forceX(643 / 2).strength(0.05))
       // .force("y", d3.forceY(820/ 2).strength(0.05))
