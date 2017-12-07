@@ -1,5 +1,5 @@
 body {
-  background: url(warriors_background_main.jpg);
+  background: url('warriors_background_main.jpg');
   background-position: center;
 }
 
@@ -36,7 +36,7 @@ svg {
 }
 
 #shotchart-canvas {
-  background: url(141_golden_state-warriors-stadium-2012.png);
+  background: url('141_golden_state-warriors-stadium-2012.png');
 
 }
 
@@ -70,4 +70,10 @@ svg {
 .bubble-chart-node:hover {
   fill: yellow;
   stroke: blue;
+}
+
+.tooltip {
+  border-radius: 5px;
+  border: 1px solid yellow;
+  background-color: blue;
 }

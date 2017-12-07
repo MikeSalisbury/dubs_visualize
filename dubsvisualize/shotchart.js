@@ -1,7 +1,6 @@
   import * as d3 from 'd3';
 
   d3.csv('./data/warriors_2016_2017.csv', function(data) {
-
     var xScale = d3.scaleLinear()
       .domain([-248, 246])
       .range([85, 760]);
@@ -19,8 +18,8 @@
         .attr('transform', function(d) {
           return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
         })
+
       .on('mouseover', function(d) {
-        console.log(d);
         tooltip.html(
            "Player Name: " + d.name + "<br/>" +
            "Shot Distance: " + d.shot_distance + "ft <br/>" +
@@ -57,6 +56,29 @@
 
     players.unshift({'key': 'ALL',
       'value': d3.sum(players, function(d) { return d.value; })
+    });
+
+    var playerFG = d3.nest()
+      .key(function(d) { return d.name; })
+      .rollup(function(arr) { return d3.sum(arr, function(d) {
+        return d.shot_made_flag;
+      });  })
+      .entries(data);
+
+    players.map(player1 => {
+      playerFG.forEach(player2 => {
+        if (player1.key === player2.key) {
+          player1.fg = ((player2.value / player1.value) * 100);
+        }
+      });
+    });
+
+    players.map(player1 => {
+      data.forEach(player2 => {
+        if (player1.key === player2.name) {
+          player1.player_img = player2.player_img;
+        }
+      });
     });
 
     var selectedPlayer = d3.select('#selected-player');
@@ -98,16 +120,19 @@
           .attr('r', function(d) {
             return scaleRadius(d.value);
           })
+        //   .attr('fill', function(d) {
+        //     return `url('${d.player_img}')`;
+        // })
           .attr('fill', 'blue')
           .attr('stroke', 'yellow')
           .attr('stroke-width', '3px')
           .attr('transform', 'translate(' + [0, 0] + ')')
 
         .on('mouseover', function(d) {
-          console.log(d);
           tooltip.html(
              "Player Name: " + d.key + "<br/>" +
-             "Total Shots: " + d.value + "<br/>")
+             "Total Shots: " + d.value + "<br/>" +
+             "FG%: " + d.fg.toFixed(2) + "%<br/>")
           .style('opacity', 1.0);
           })
 
@@ -126,10 +151,11 @@
 
       var tooltip = d3.select('body')
          .append("div")
+         .attr('class', 'tooltip')
          .style('position', 'absolute')
          .style("color", "white")
          .style("padding", "8px")
-         .style("background-color", "black")
+         .style("background-color", "blue")
          .style("border-radius", "6px")
          .style("text-align", "left")
          .style("font-family", "monospace")
@@ -174,12 +200,25 @@
       }
 
       function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
+        if (d3.event.x > 820) {
+          d.fx = 820;
+        } else if (d3.event.x < 0) {
+          d.fx = 0;
+        } else {
+          d.fx = d3.event.x;
+        }
+
+        if (d3.event.y > 643) {
+          d.fy = 643;
+        } else if (d3.event.y < 0) {
+          d.fy = 0;
+        } else {
+          d.fy = d3.event.y;
+        }
       }
 
       function dragended(d) {
-        if (!d3.event.active) simulation.alphaTarget(0);
+        if (!d3.event.active) simulation.alphaTarget(0.3);
         d3.event.subject.fx = null;
         d3.event.subject.fy = null;
       }
