@@ -1,6 +1,7 @@
 body {
   background: url('warriors_background_main.jpg');
   background-position: center;
+
 }
 
 #shotchart {
@@ -10,9 +11,13 @@ body {
 
 #header {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Russo One', sans-serif;
+    font-size: 25px;
+    color: white;
+    text-shadow: 3px 3px black;
 }
 
 #select-filters {
@@ -32,7 +37,8 @@ body {
 }
 
 svg {
-  border: 1px solid black;
+  border: 1px solid blue;
+  border-radius: 5px;
 }
 
 #shotchart-canvas {
@@ -56,11 +62,12 @@ svg {
 }
 
 #season-slider {
-
+  cursor: pointer;
 }
 
 #selected-player {
-  width: 65%;
+  padding: 5px;
+  cursor: pointer;
 }
 
 #bubble-chart-canvas {
@@ -68,7 +75,6 @@ svg {
 }
 
 .bubble-chart-node:hover {
-  /*fill: yellow;*/
   stroke: yellow;
 }
 

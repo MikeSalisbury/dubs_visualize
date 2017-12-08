@@ -16,11 +16,7 @@
 
   function updateData() {
     season = sliderValue._groups[0][0].value;
-    // var shotchartcanvas = d3.select('#shotchart-canvas').selectAll('g').selectAll('circle');
-    // console.log(shotchartcanvas);
-    // shotchartcanvas.exit().remove();
-    // console.log(shotchartcanvas);
-    // var bubblechartcanvas = d3.select('#bubble-chart-canvas').selectAll('g');
+
     var seasonheader = document.getElementById('selected-season');
 
     if (season === '2015') {
@@ -45,6 +41,7 @@
   }
 
 function ready(error, data) {
+
   d3.select('#shotchart-canvas').selectAll('*').remove();
   d3.select('#bubble-chart-canvas').selectAll('*').remove();
   d3.select('#selected-player').selectAll('*').remove();
@@ -242,7 +239,7 @@ function ready(error, data) {
          .style('opacity', 0);
 
       var simulation = d3.forceSimulation()
-      .force("charge", d3.forceManyBody().strength([40]))
+      .force("charge", d3.forceManyBody().strength([50]))
       .force('center', d3.forceCenter(820/ 2, 643 / 2))
       .force('collide', d3.forceCollide(function(d) {
         return scaleRadius(d.value) + 2;
@@ -259,7 +256,7 @@ function ready(error, data) {
         .attr("cy", function(d) { return d.y; });
       }
 
-      simulation.nodes(onlyPlayers)
+      simulation.nodes(onlyPlayers.sort())
         .on('tick', ticked);
 
       bubbles
