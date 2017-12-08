@@ -45,6 +45,10 @@
   }
 
 function ready(error, data) {
+  d3.select('#shotchart-canvas').selectAll('*').remove();
+  d3.select('#bubble-chart-canvas').selectAll('*').remove();
+  d3.select('#selected-player').selectAll('*').remove();
+
     var defs = d3.select('#bubble-chart-canvas').append('defs');
 
       defs.append("pattern")
@@ -104,8 +108,6 @@ function ready(error, data) {
           return 'red';
         }})
       .attr('stroke', 'black');
-
-    console.log(d3.select('#shotchart-canvas').selectAll('.shot').exit());
 
     var players = d3.nest()
       .key(function(d) { return d.name; })

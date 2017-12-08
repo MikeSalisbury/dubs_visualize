@@ -9481,6 +9481,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   }
 
 function ready(error, data) {
+  __WEBPACK_IMPORTED_MODULE_0_d3__["m" /* select */]('#shotchart-canvas').selectAll('*').remove();
+  __WEBPACK_IMPORTED_MODULE_0_d3__["m" /* select */]('#bubble-chart-canvas').selectAll('*').remove();
+  __WEBPACK_IMPORTED_MODULE_0_d3__["m" /* select */]('#selected-player').selectAll('*').remove();
+
     var defs = __WEBPACK_IMPORTED_MODULE_0_d3__["m" /* select */]('#bubble-chart-canvas').append('defs');
 
       defs.append("pattern")
@@ -9540,8 +9544,6 @@ function ready(error, data) {
           return 'red';
         }})
       .attr('stroke', 'black');
-
-    console.log(__WEBPACK_IMPORTED_MODULE_0_d3__["m" /* select */]('#shotchart-canvas').selectAll('.shot').exit());
 
     var players = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* nest */]()
       .key(function(d) { return d.name; })
