@@ -1,7 +1,50 @@
   import * as d3 from 'd3';
 
-  d3.csv('./data/warriors_2016_2017.csv', function(data) {
+  // window.onload = function (){
+  //   document.getElementById('season-slider').addEventListener('change', updatedata());
+  // };
 
+  var sliderValue = d3.select('#season-slider');
+  sliderValue.on('change', function() { updateData(); });
+
+  var season = sliderValue._groups[0][0].value;
+
+  var q = d3.queue()
+  .defer(d3.csv, './data/warriors_2016_2017.csv')
+  .await(ready);
+
+
+  function updateData() {
+    season = sliderValue._groups[0][0].value;
+    // var shotchartcanvas = d3.select('#shotchart-canvas').selectAll('g').selectAll('circle');
+    // console.log(shotchartcanvas);
+    // shotchartcanvas.exit().remove();
+    // console.log(shotchartcanvas);
+    // var bubblechartcanvas = d3.select('#bubble-chart-canvas').selectAll('g');
+    var seasonheader = document.getElementById('selected-season');
+
+    if (season === '2015') {
+      seasonheader.innerText = `2015-2016 season`;
+      q = d3.queue()
+      .defer(d3.csv, './data/warriors_2015_2016.csv')
+      .await(ready);
+
+    } else if (season === '2014') {
+      seasonheader.innerText = `2014-2015 season`;
+      q = d3.queue()
+      .defer(d3.csv, './data/warriors_2014_2015.csv')
+      .await(ready);
+
+    } else if (season === '2016') {
+      seasonheader.innerText = `2016-2017 season`;
+      q = d3.queue()
+      .defer(d3.csv, './data/warriors_2016_2017.csv')
+      .await(ready);
+
+    }
+  }
+
+function ready(error, data) {
     var defs = d3.select('#bubble-chart-canvas').append('defs');
 
       defs.append("pattern")
@@ -33,7 +76,6 @@
         .attr('transform', function(d) {
           return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
         })
-
       .on('mouseover', function(d) {
         tooltip.html(
            "Player Name: " + d.name + "<br/>" +
@@ -51,7 +93,6 @@
 
       .on('mouseout', function(d) {
           tooltip.style('opacity', 0);
-          // d3.selectAll('text.shotType').remove();
       });
 
     shots.append("circle")
@@ -63,6 +104,8 @@
           return 'red';
         }})
       .attr('stroke', 'black');
+
+    console.log(d3.select('#shotchart-canvas').selectAll('.shot').exit());
 
     var players = d3.nest()
       .key(function(d) { return d.name; })
@@ -95,7 +138,6 @@
         }
       });
     });
-
     var selectedPlayer = d3.select('#selected-player');
 
     selectedPlayer
@@ -127,7 +169,8 @@
 
           defs.selectAll(".player-pattern")
              .data(onlyPlayers)
-             .enter().append("pattern")
+             .enter()
+             .append("pattern")
              .attr("class", "player-pattern")
              .attr("id", function(d){
                return d.key.replace(/ /g,"-");
@@ -141,7 +184,6 @@
              .attr("preserveAspectRadio", "none")
              .attr("xmlns:xlink", "http://w3.org/1999/xlink")
              .attr("xlink:href", function (d) {
-               console.log(d);
                return `${d.player_img}`;
              });
 
@@ -198,7 +240,7 @@
          .style('opacity', 0);
 
       var simulation = d3.forceSimulation()
-      .force("charge", d3.forceManyBody().strength([50]))
+      .force("charge", d3.forceManyBody().strength([40]))
       .force('center', d3.forceCenter(820/ 2, 643 / 2))
       .force('collide', d3.forceCollide(function(d) {
         return scaleRadius(d.value) + 2;
@@ -257,5 +299,4 @@
         d3.event.subject.fx = null;
         d3.event.subject.fy = null;
       }
-
-  });
+  }
